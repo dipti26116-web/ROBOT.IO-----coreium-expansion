@@ -96,6 +96,17 @@ function getPlanet() {
   return planets[state.currentPlanet];
 }
 
+function getResourceKey() {
+  const mapping = {
+    Earth: "ore",
+    Moon: "crystal",
+    Mars: "battery",
+    Alien: "coreium",
+    Space: "quantumCore",
+  };
+  return mapping[state.currentPlanet] || "ore";
+}
+
 function getMultiplier() {
   return Math.pow(1.5, state.rebirths);
 }
@@ -168,20 +179,23 @@ function hideInsufficientModal() {
 function showMiningPulse() {
   const btn = document.getElementById("mineBtn");
   const status = document.getElementById("miningStatus");
+  const resourceName = getPlanet().resource;
   const gain = Math.max(1, Math.round(getMiningYield()));
   btn.innerHTML = `⛏ Mining...<span class="mining-progress"><span><i></i></span></span>`;
-  status.textContent = `⛏ Mining ${getPlanet().resource.toLowerCase()}... Ore +${gain}`;
+  status.textContent = `⛏ Mining ${resourceName.toLowerCase()}... ${resourceName} +${gain}`;
   setTimeout(() => {
-    btn.innerHTML = "⛏ Mine Ore";
+    btn.innerHTML = `⛏ Mine ${resourceName}`;
     status.textContent = "⛏ Ready to mine.";
   }, 700);
 }
 
 function mineOre() {
-  state.ore += getMiningYield();
-  state.mission = `Mining ${getPlanet().resource.toLowerCase()} on ${state.currentPlanet}.`;
+  const resourceKey = getResourceKey();
+  const resourceName = getPlanet().resource;
+  state[resourceKey] += getMiningYield();
+  state.mission = `Mining ${resourceName.toLowerCase()} on ${state.currentPlanet}.`;
   showMiningPulse();
-  spawnFloatingText(`Ore +${Math.max(1, Math.round(getMiningYield()))}`, "mineBtn", "");
+  spawnFloatingText(`${resourceName} +${Math.max(1, Math.round(getMiningYield()))}`, "mineBtn", "");
   saveState();
   render();
 }
@@ -352,8 +366,9 @@ function tick() {
     const usage = getPowerUsage();
     if (state.power > usage) {
       state.power -= usage * 0.2;
-      state.ore += getMiningYield() * 0.2;
-      if (state.ore >= 8) {
+      const resourceKey = getResourceKey();
+      state[resourceKey] += getMiningYield() * 0.2;
+      if (resourceKey === "ore" && state.ore >= 8) {
         const amount = Math.floor(state.ore / 8);
         state.ore -= amount * 8;
         state.steel += amount * getSmeltYield();
@@ -466,6 +481,7 @@ function render() {
   const rebirthBtn = document.getElementById("rebirthBtn");
   const rebirthInfo = document.getElementById("rebirthInfo");
   const unlocked = state.credits >= 10000;
+  const mineBtn = document.getElementById("mineBtn");
 
   document.getElementById("credits").textContent = state.credits.toFixed(0);
   document.getElementById("power").textContent = state.power.toFixed(1);
@@ -477,6 +493,7 @@ function render() {
   document.getElementById("coreium").textContent = state.coreium.toFixed(1);
   document.getElementById("quantum").textContent = state.quantumCore.toFixed(1);
   document.getElementById("mission").textContent = state.mission;
+  mineBtn.textContent = `⛏ Mine ${getPlanet().resource}`;
 
   rebirthBtn.disabled = !unlocked;
   rebirthBtn.classList.toggle("locked", !unlocked);
