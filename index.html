@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROBOT.IO Industries</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="stars" aria-hidden="true"></div>
+    <div class="floating-layer" id="floatingLayer"></div>
+
+    <div id="modalOverlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Insufficient funds">
+      <div class="modal-card">
+        <button id="modalCloseBtn" class="modal-close" aria-label="Close">×</button>
+        <h3>Insufficient funds</h3>
+        <p id="modalMessage">You do not have enough resources for that action.</p>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">2158 · COREIUM EXPANSION</p>
+          <h1>ROBOT.IO Industries</h1>
+          <p class="subtitle">Mine, automate, and build a robot civilization.</p>
+        </div>
+        <div class="hero-stats">
+          <div id="creditsCard" class="stat-card">
+            <span>💰 Credits</span>
+            <strong id="credits">0</strong>
+          </div>
+          <div id="powerCard" class="stat-card">
+            <span>⚡ Power</span>
+            <strong id="power">0</strong>
+          </div>
+          <div id="robotCard" class="stat-card">
+            <span>🤖 Robots</span>
+            <strong id="robotCount">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <section class="factory-map-panel">
+        <div class="factory-map">
+          <div class="map-node">🏭<span>Factory</span></div>
+          <div class="map-line"></div>
+          <div class="map-node">🤖<span>Mine</span></div>
+          <div class="map-line"></div>
+          <div class="map-node">⚙️<span>Conveyor</span></div>
+          <div class="map-line"></div>
+          <div class="map-node">🔥<span>Furnace</span></div>
+        </div>
+      </section>
+
+      <main class="game-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Operations</h2>
+            <p id="mission">Build your first mining empire.</p>
+          </div>
+          <div class="button-row">
+            <button id="mineBtn">⛏ Mine Ore</button>
+            <button id="smeltBtn">🔥 Smelt Steel</button>
+            <button id="sellBtn">💸 Sell Cargo</button>
+            <button id="toggleAutoBtn">⏸ Pause Automation</button>
+          </div>
+          <div class="rebirth-panel">
+            <button id="rebirthBtn" class="rebirth-btn locked">🔒⛓ Rebirth</button>
+            <div id="rebirthInfo" class="rebirth-info">Reach 10,000 credits to unlock rebirth.</div>
+          </div>
+          <div id="miningStatus" class="mining-status">⛏ Ready to mine.</div>
+          <div class="resource-grid">
+            <div class="resource-card"><span>⛏ Ore</span><strong id="ore">0</strong></div>
+            <div class="resource-card"><span>🔩 Steel</span><strong id="steel">0</strong></div>
+            <div class="resource-card"><span>🔋 Battery</span><strong id="battery">0</strong></div>
+            <div class="resource-card"><span>💎 Crystal</span><strong id="crystal">0</strong></div>
+            <div class="resource-card"><span>⚛ Coreium</span><strong id="coreium">0</strong></div>
+            <div class="resource-card"><span>✨ Quantum Core</span><strong id="quantum">0</strong></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Fleet</h2>
+            <p>Your automated workers.</p>
+          </div>
+          <div id="fleetList" class="card-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Buildings</h2>
+            <p>Expand factories and infrastructure.</p>
+          </div>
+          <div id="buildingList" class="card-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Research</h2>
+            <p>Unlock better tech and faster production.</p>
+          </div>
+          <div id="researchList" class="card-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>World</h2>
+            <p>Travel to new worlds for rare resources.</p>
+          </div>
+          <div id="planetList" class="card-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Resource Guide</h2>
+            <p>How each material is produced and unlocked.</p>
+          </div>
+          <div class="guide-list">
+            <div class="guide-item">
+              <strong>⛏ Ore</strong>
+              <span>Start here. Mine it from Earth with Miner Bots.</span>
+            </div>
+            <div class="guide-item">
+              <strong>🔩 Steel</strong>
+              <span>Smelt ore into steel. You need enough ore to convert it.</span>
+            </div>
+            <div class="guide-item">
+              <strong>🔋 Battery</strong>
+              <span>Unlock Mars and mine there to gather batteries.</span>
+            </div>
+            <div class="guide-item">
+              <strong>💎 Crystal</strong>
+              <span>Unlock the Moon and mine crystal there.</span>
+            </div>
+            <div class="guide-item">
+              <strong>⚛ Coreium</strong>
+              <span>Unlock the Alien Planet for rare coreium.</span>
+            </div>
+            <div class="guide-item">
+              <strong>✨ Quantum Core</strong>
+              <span>Unlock the Space Station for the final-tier resource.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Robot Programming</h2>
+            <p>Simple automation blocks for your fleet.</p>
+          </div>
+          <div class="script-box">
+            <div class="script-line">IF Ore Found → Mine</div>
+            <div class="script-line">IF Inventory Full → Go To Factory</div>
+            <div class="script-line">IF Power Low → Recharge</div>
+            <div class="script-line">IF AI Active → Automate</div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
